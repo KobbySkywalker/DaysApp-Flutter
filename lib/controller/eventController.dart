@@ -1,3 +1,4 @@
+import 'package:days/pages/createdUpcomingEvent.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:days/models/eventModel.dart';
@@ -14,7 +15,7 @@ class EventController extends ChangeNotifier with EventServices {
 
   List<EventModel> get event => _event;
 
-  void getCreatedEvent(BuildContext context) async {
+  void getCreatedEvent(BuildContext context, VoidCallback onFunc) async {
     LoadingIndicator(context, text: "Almost done...").show();
     try {
       var response = await getEvents(context);
@@ -26,11 +27,7 @@ class EventController extends ChangeNotifier with EventServices {
         });
         print(_event.length);
         notifyListeners();
-        Navigator.push(context, MaterialPageRoute<void>(
-          builder: (context) {
-            return SavedPreview();
-          },
-        ));
+        onFunc();
       } else if (response is FailedResponse) {
         Navigator.of(context).pop();
         if (response.responseCode == 400) {
@@ -94,7 +91,86 @@ class EventController extends ChangeNotifier with EventServices {
               child: const Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();
-                getCreatedEvent(context);
+                getCreatedEvent(context, () {
+                  Navigator.push(context, MaterialPageRoute<void>(
+                    builder: (context) {
+                      return SavedPreview();
+                    },
+                  ));
+                });
+              },
+            )
+          ],
+        ),
+      );
+    } else if (response is FailedResponse) {
+      Navigator.of(context).pop();
+      if (response.responseCode == 400) {
+        print("ERROR");
+        showDialog(
+          context: context,
+          builder: (ctx) => CupertinoAlertDialog(
+            title: const Text("Error Occured"),
+            content: Text(response.response.toString()),
+            actions: [
+              CupertinoDialogAction(
+                isDefaultAction: true,
+                child: const Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          ),
+        );
+      } else if (response.responseCode == 500) {
+        print("HERE");
+        showDialog(
+          context: context,
+          builder: (ctx) => CupertinoAlertDialog(
+            title: const Text("Error Occured"),
+            content: Text(response.response.toString()),
+            actions: [
+              CupertinoDialogAction(
+                isDefaultAction: true,
+                child: const Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          ),
+        );
+      }
+    }
+  }
+
+  void deleteSingleEvent(BuildContext context, String id) async {
+    LoadingIndicator(context, text: "Creating event...").show();
+    var response = await deleteEvent(context, id);
+    print(response);
+    if (response is SuccessResponse) {
+      Navigator.of(context).pop();
+      // eventModel = (response.response) as EventModel;
+      notifyListeners();
+      showDialog(
+        context: context,
+        builder: (ctx) => CupertinoAlertDialog(
+          title: const Text("Event Deleted"),
+          content: Text("Event has successfully been Deleted"),
+          actions: [
+            CupertinoDialogAction(
+              isDefaultAction: true,
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                getCreatedEvent(context, () {
+                  Navigator.push(context, MaterialPageRoute<void>(
+                    builder: (context) {
+                      return CreatedUpcomingEvent();
+                    },
+                  ));
+                });
               },
             )
           ],

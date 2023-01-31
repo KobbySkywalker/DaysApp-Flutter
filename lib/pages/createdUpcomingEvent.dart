@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:days/pages/detailedEventPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -62,6 +63,14 @@ class _CreatedUpcomingEventState extends State<CreatedUpcomingEvent> {
               showBool: false,
               image: allEvent.url,
               imageTitle: allEvent.eventTitle,
+              onTap: () {
+                                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DetailedEventPage(allEvent: allEvent),
+                  ),
+                );
+              },
               daysLeft: DateFormatter.format(allEvent.eventCreated!),
             );
           },

@@ -4,7 +4,7 @@ class APIURL {
   static const String perPage = "5";
   static const String perBackgroundPage = "30";
 
-  static const eventBaseURL = "https://days-app-api.herokuapp.com";
+  static const eventBaseURL = "https://days-api.onrender.com";
 
   static String getUrl(String destination) {
     return "$baseURL/$destination";

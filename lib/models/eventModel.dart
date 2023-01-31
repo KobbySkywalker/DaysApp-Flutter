@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 class EventModel {
+  String? id;
   String? eventTitle;
   String? eventDate;
   String? startTime;
@@ -9,7 +10,8 @@ class EventModel {
   String? eventCreated;
 
   EventModel(
-      {this.eventTitle,
+      {this.id,
+      this.eventTitle,
       this.startTime,
       this.endTime,
       this.eventDate,
@@ -18,6 +20,7 @@ class EventModel {
 
   factory EventModel.fromJson(Map<String, dynamic> json) {
     return EventModel(
+      id: json["_id"] ?? "N/A",
       eventTitle: json["eventTitle"] ?? "N/A",
       eventDate: json["eventDate"] ?? DateTime.now().toString(),
       startTime: json["startTime"] ?? "N/A",

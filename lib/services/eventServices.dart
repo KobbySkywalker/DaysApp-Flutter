@@ -1,3 +1,4 @@
+import 'package:days/services/httpRequest/deleteRequest.dart';
 import 'package:flutter/material.dart';
 import 'package:days/api/apiUrl.dart';
 import 'package:days/models/eventModel.dart';
@@ -38,6 +39,22 @@ class EventServices {
       );
     } else if (response is FailedResponse) {
       print(response.response);
+      return FailedResponse(
+        response: response.response,
+        responseCode: response.responseCode,
+      );
+    }
+    return null;
+  }
+
+    Future<Object?> deleteEvent(BuildContext context, String id) async {
+    var response =
+        await DeleteRequest.delete(APIURL.url("api/delete-event/$id"));
+    print(response);
+    if (response is SuccessResponse) {
+      return SuccessResponse(
+          responseCode: response.responseCode, response: "successful");
+    } else if (response is FailedResponse) {
       return FailedResponse(
         response: response.response,
         responseCode: response.responseCode,
