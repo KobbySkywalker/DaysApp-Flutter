@@ -1,6 +1,7 @@
-# days
+# Days - Flutter
 
-A new Flutter project.
+A new Flutter project to strengthen my Dart knowledge base.
+Took inspiration from Days, an event countdown and management app on the App Store to build a similar app in Flutter.
 
 ## Getting Started
 
